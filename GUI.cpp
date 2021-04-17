@@ -2,6 +2,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <vector>
+using std::vector;
 using std::cin;
 using std::cout;
 using std::atoi;
@@ -152,14 +154,61 @@ int main() {
 
   bool showcurs = false;
 
+  vector<vector<string>> done;
+  done = {{"06/10","hello"},{"04/23","hey"}};
+
   sf::Window window2;
 
   while (window.isOpen() || window2.isOpen()) {
     if (window2.isOpen()) {
       sf::Event event2;
       while (window2.pollEvent(event2)) {
-        if (event2.type == sf::Event::Closed)
+        if (event2.type == sf::Event::Closed){
           window2.close();
+          for (auto d : done){
+            string thisdate = d.at(0);
+            string thistask = d.at(1);
+            bool rm = false;
+            int b = 0;
+            for (int i = 0; i < date_disp.length(); i = i + 7) {
+              b++;
+              if (date_disp.substr(i+2,5) == thisdate){
+                // dates.setString(thisdate);
+                int lb = 0;
+                for (int j = 0; j < task_disp.length(); j++){
+                  if (task_disp.at(j) == '\n') lb++;
+                  if (lb/2 == b && lb%2 == 0) {
+                    if (task_disp.substr(j+1,thistask.length())==thistask) {
+                      date_disp = date_disp.substr(0,i) + date_disp.substr(i+7,date_disp.length()-(i+7));
+                      task_disp = task_disp.substr(0,j-1) + \
+                      task_disp.substr(j+thistask.length()+1,task_disp.length()-(j+1+thistask.length()));
+                      dates.setString(date_disp);
+                      tasks.setString(task_disp);
+                      rm = true;
+                      break;
+                    }
+                  }
+                }
+                if (rm) {
+                  int lb = 0;
+                  for (int j = 0; j < rank_disp.length(); j++){
+                    if (rank_disp.at(j) == '\n') lb++;
+                    if (lb/2 == b && lb%2 == 0) {
+                      string thisrank = rank_disp.substr(j+1,2);
+                      int change = 2;
+                      if (thisrank == "10") change += 1;
+                      rank_disp = rank_disp.substr(0,j-1) + \
+                      rank_disp.substr(j+change,rank_disp.length()-(j+change));
+                      ranks.setString(rank_disp);
+                      break;
+                    }
+                  }
+                }
+              }
+              if (rm) break;
+            }
+        }
+      }
         // Georgia's code
       }
     }
@@ -261,7 +310,7 @@ int main() {
           }
           date_disp = date_disp.substr(0, j + 1);
           dates.setString(date_disp);
-          date_disp = task_disp.substr(0, j - 1);
+          date_disp = date_disp.substr(0, j - 1);
 
           for (j = task_disp.length() - 1; j >= 0 ; j--) {
             check = task_disp.at(j);
@@ -281,7 +330,7 @@ int main() {
           }
           rank_disp = rank_disp.substr(0, j + 1);
           ranks.setString(rank_disp);
-          rank_disp = task_disp.substr(0, j - 1);
+          rank_disp = rank_disp.substr(0, j - 1);
         } else if (clearbutton.getGlobalBounds().contains(translated_pos)) {
         clearbutton.setFillColor(sf::Color(92, 158, 225, 255));
         date_disp = " ";
