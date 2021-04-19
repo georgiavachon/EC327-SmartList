@@ -1,8 +1,9 @@
+// Copyright Megan Freeman 2021 megfree@bu.edu
 #include <string>
 #include <iostream>
+#include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include <vector>
 using std::vector;
 using std::cin;
 using std::cout;
@@ -17,7 +18,7 @@ int main() {
   sf::RenderWindow window(sf::VideoMode(1500, 1000), "SmartList");
   window.setFramerateLimit(10);
 
-  //creating app elements
+  // creating app elements
   sf::RectangleShape background;
   background.setSize(sf::Vector2f(1500, 1000));
   background.setFillColor(sf::Color::White);
@@ -25,6 +26,15 @@ int main() {
   sf::RectangleShape topbanner;
   topbanner.setSize(sf::Vector2f(1500, 60));
   topbanner.setFillColor(sf::Color(102, 178, 255, 255));
+
+  sf::RectangleShape hidescroll;
+  hidescroll.setSize(sf::Vector2f(1500, 300));
+  hidescroll.setFillColor(sf::Color::White);
+
+  sf::RectangleShape hidescroll2;
+  hidescroll2.setSize(sf::Vector2f(1500, 110));
+  hidescroll2.setFillColor(sf::Color::White);
+  hidescroll2.setPosition(0, 890);
 
   sf::RectangleShape datebox;
   datebox.setSize(sf::Vector2f(300, 30));
@@ -155,33 +165,43 @@ int main() {
   bool showcurs = false;
 
   vector<vector<string>> done;
-  done = {{"06/10","hello"},{"04/23","hey"}};
+  done = {{"06/10", "hello"}, {"04/23", "hey"}};
 
   sf::Window window2;
+
+
+  tasksheader.setPosition(80, 200);
+  dates.setPosition(80, 250);
+  tasks.setPosition(460, 250);
+  ranks.setPosition(840, 250);
 
   while (window.isOpen() || window2.isOpen()) {
     if (window2.isOpen()) {
       sf::Event event2;
       while (window2.pollEvent(event2)) {
-        if (event2.type == sf::Event::Closed){
+        if (event2.type == sf::Event::Closed) {
           window2.close();
-          for (auto d : done){
+          for (auto d : done) {
             string thisdate = d.at(0);
             string thistask = d.at(1);
             bool rm = false;
             int b = 0;
             for (int i = 0; i < date_disp.length(); i = i + 7) {
               b++;
-              if (date_disp.substr(i+2,5) == thisdate){
+              if (date_disp.substr(i + 2, 5) == thisdate) {
                 // dates.setString(thisdate);
                 int lb = 0;
-                for (int j = 0; j < task_disp.length(); j++){
+                for (int j = 0; j < task_disp.length(); j++) {
                   if (task_disp.at(j) == '\n') lb++;
-                  if (lb/2 == b && lb%2 == 0) {
-                    if (task_disp.substr(j+1,thistask.length())==thistask) {
-                      date_disp = date_disp.substr(0,i) + date_disp.substr(i+7,date_disp.length()-(i+7));
-                      task_disp = task_disp.substr(0,j-1) + \
-                      task_disp.substr(j+thistask.length()+1,task_disp.length()-(j+1+thistask.length()));
+                  if (lb / 2 == b && lb % 2 == 0) {
+                    if (task_disp.substr(j + 1, \
+                                         thistask.length()) == thistask) {
+                      date_disp = date_disp.substr(0, i) + \
+                                  date_disp.substr(i + 7, date_disp.length() - (i + 7));
+                      task_disp = task_disp.substr(0, j - 1) + \
+                                  task_disp.substr(j + thistask.length() + 1, \
+                                                   task_disp.length() - (j + 1 + \
+                                                       thistask.length()));
                       dates.setString(date_disp);
                       tasks.setString(task_disp);
                       rm = true;
@@ -191,14 +211,15 @@ int main() {
                 }
                 if (rm) {
                   int lb = 0;
-                  for (int j = 0; j < rank_disp.length(); j++){
+                  for (int j = 0; j < rank_disp.length(); j++) {
                     if (rank_disp.at(j) == '\n') lb++;
-                    if (lb/2 == b && lb%2 == 0) {
-                      string thisrank = rank_disp.substr(j+1,2);
+                    if (lb / 2 == b && lb % 2 == 0) {
+                      string thisrank = rank_disp.substr(j + 1, 2);
                       int change = 2;
                       if (thisrank == "10") change += 1;
-                      rank_disp = rank_disp.substr(0,j-1) + \
-                      rank_disp.substr(j+change,rank_disp.length()-(j+change));
+                      rank_disp = rank_disp.substr(0, j - 1) + \
+                                  rank_disp.substr(j + change, \
+                                                   rank_disp.length() - (j + change));
                       ranks.setString(rank_disp);
                       break;
                     }
@@ -207,8 +228,8 @@ int main() {
               }
               if (rm) break;
             }
+          }
         }
-      }
         // Georgia's code
       }
     }
@@ -216,7 +237,7 @@ int main() {
     deletebutton.setFillColor(sf::Color(102, 178, 255, 255));
     clearbutton.setFillColor(sf::Color(102, 178, 255, 255));
     genbutton.setFillColor(sf::Color(102, 178, 255, 255));
-    
+
     int datelength = userdInput.getSize();
     int tasklength = usertInput.getSize();
     int ranklength = userrInput.getSize();
@@ -230,14 +251,16 @@ int main() {
     if (dateentry == false && taskentry\
         == false && rankentry == false)
       showcurs = false;
-    else showcurs = true;
+    else
+      showcurs = true;
 
     bool valid = false;
 
-    if(++blinkCnt >= blinkFreq) {
+    if (++blinkCnt >= blinkFreq) {
       Shown = !Shown;
       blinkCnt = 0;
     }
+
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed)
         window.close();
@@ -245,7 +268,7 @@ int main() {
       auto mouse_pos = sf::Mouse::getPosition(window);
       auto translated_pos = window.mapPixelToCoords(mouse_pos);
       if (event.type == sf::Event::MouseButtonPressed) {
-        if(datebox.getGlobalBounds().contains(translated_pos)) {
+        if (datebox.getGlobalBounds().contains(translated_pos)) {
           // clicked in datebox
           userdText.setFillColor(sf::Color::Black);
           dateentry = true;
@@ -262,8 +285,8 @@ int main() {
           taskentry = false;
           rankentry = true;
         } else if (add.getGlobalBounds().contains(translated_pos)) {
-        // clicked add button
-        // cursor not blinking anymore
+          // clicked add button
+          // cursor not blinking anymore
           add.setFillColor(sf::Color(92, 158, 225, 255));
           if (datelength == 5 && tasklength > 0 && ranklength > 0) {
             dateentry = false;
@@ -278,7 +301,9 @@ int main() {
                 if (day > 0 && day <= 30) valid = true;
               } else if (month == 2) {
                 if (day > 0 && day <= 29) valid = true;
-              } else if (day > 0 && day <= 31) valid = true;
+              } else if (day > 0 && day <= 31) {
+                valid = true;
+              }
             }
             if (valid) {
               // add new entry and delete text from fields
@@ -299,10 +324,10 @@ int main() {
             }
           }
         } else if (deletebutton.getGlobalBounds().contains(translated_pos)) {
-        deletebutton.setFillColor(sf::Color(92, 158, 225, 255));
-        char check = ' ';
-        int j;
-        for (j = date_disp.length() - 1; j >= 0 ; j--) {
+          deletebutton.setFillColor(sf::Color(92, 158, 225, 255));
+          char check = ' ';
+          int j;
+          for (j = date_disp.length() - 1; j >= 0 ; j--) {
             check = date_disp.at(j);
             if (check == '\n') {
               break;
@@ -332,16 +357,16 @@ int main() {
           ranks.setString(rank_disp);
           rank_disp = rank_disp.substr(0, j - 1);
         } else if (clearbutton.getGlobalBounds().contains(translated_pos)) {
-        clearbutton.setFillColor(sf::Color(92, 158, 225, 255));
-        date_disp = " ";
-        task_disp = " ";
-        rank_disp = " ";
-        dates.setString(date_disp);
+          clearbutton.setFillColor(sf::Color(92, 158, 225, 255));
+          date_disp = " ";
+          task_disp = " ";
+          rank_disp = " ";
+          dates.setString(date_disp);
           tasks.setString(task_disp);
           ranks.setString(rank_disp);
         } else if (genbutton.getGlobalBounds().contains(translated_pos)) {
-        genbutton.setFillColor(sf::Color(92, 158, 225, 255));
-        window2.create(sf::VideoMode(1000, 1000), "Your SmartList");
+          genbutton.setFillColor(sf::Color(92, 158, 225, 255));
+          window2.create(sf::VideoMode(1000, 1000), "Your SmartList");
           window2.setFramerateLimit(10);
           window2.display();
         }
@@ -358,7 +383,9 @@ int main() {
               if (day > 0 && day <= 30) valid = true;
             } else if (month == 2) {
               if (day > 0 && day <= 29) valid = true;
-            } else if (day > 0 && day <= 31) valid = true;
+            } else if (day > 0 && day <= 31) {
+              valid = true;
+            }
           }
           if (valid) {
             // fields filled out and enter is pressed: add
@@ -380,7 +407,6 @@ int main() {
             usertInput.clear();
             userrInput.clear();
           } else {
-
             userdText.setFillColor(sf::Color::Red);
           }
         }
@@ -410,7 +436,8 @@ int main() {
             rankentry = true;
             break;
           } else if (event.text.unicode < 128 && \
-                     usertText.getLocalBounds().width < taskbox.getLocalBounds().width - 12) {
+                     usertText.getLocalBounds().width < \
+                     taskbox.getLocalBounds().width - 12) {
             usertInput += event.text.unicode;
           }
           usertText.setString(usertInput);
@@ -424,7 +451,8 @@ int main() {
             dateentry = true;
             rankentry = false;
             break;
-          } else if (event.text.unicode < 58 && event.text.unicode > 47 && ranklength < 2) {
+          } else if (event.text.unicode < 58 && \
+                     event.text.unicode > 47 && ranklength < 2) {
             if (ranklength == 0 && event.text.unicode != '0')
               userrInput += event.text.unicode;
             else if (userrInput == "1" && event.text.unicode == '0')
@@ -434,6 +462,28 @@ int main() {
           userrText.setCharacterSize(25);
           userrText.setFillColor(sf::Color::Black);
           userrText.setPosition(845, 125);
+        }
+      }
+      if (event.type == sf::Event::MouseWheelScrolled) {
+        int scrolled = event.mouseWheelScroll.delta;
+        int datey = dates.getPosition().y;
+        int dateh = dates.getLocalBounds().height;
+        int tasky = tasks.getPosition().y;
+        int ranky = ranks.getPosition().y;
+        if (dateh > 600) {
+          if (scrolled < 0) {
+            if (dateh + datey >= 850) {
+              dates.setPosition(80, datey - 10 * scrolled);
+              tasks.setPosition(460, tasky - 10 * scrolled);
+              ranks.setPosition(840, ranky - 10 * scrolled);
+            }
+          } else if (scrolled > 0) {
+            if (datey <= 250) {
+              dates.setPosition(80, datey - 10 * scrolled);
+              tasks.setPosition(460, tasky - 10 * scrolled);
+              ranks.setPosition(840, ranky - 10 * scrolled);
+            }
+          }
         }
       }
     }
@@ -453,10 +503,10 @@ int main() {
     add.setPosition(1200, 115);
     addtext.setPosition(1240, 120);
 
-    tasksheader.setPosition(80, 200);
-    dates.setPosition(80, 250);
-    tasks.setPosition(460, 250);
-    ranks.setPosition(840, 250);
+    // tasksheader.setPosition(80, 200);
+    // dates.setPosition(80, 250);
+    // tasks.setPosition(460, 250);
+    // ranks.setPosition(840, 250);
 
     deletebutton.setPosition(550, 900);
     deletelast.setPosition(560, 905);
@@ -467,6 +517,13 @@ int main() {
 
     // draw and display elements in window
     window.draw(background);
+
+    window.draw(dates);
+    window.draw(tasks);
+    window.draw(ranks);
+
+    window.draw(hidescroll);
+    window.draw(hidescroll2);
     window.draw(topbanner);
     window.draw(bannertxt);
 
@@ -482,16 +539,13 @@ int main() {
     window.draw(rankbox);
     window.draw(ranktitle);
     window.draw(userrText);
-    if(Shown && showcurs == true)
+    if (Shown && showcurs == true)
       window.draw(cursor);
 
     window.draw(add);
     window.draw(addtext);
 
     window.draw(tasksheader);
-    window.draw(dates);
-    window.draw(tasks);
-    window.draw(ranks);
 
     window.draw(deletebutton);
     window.draw(deletelast);
