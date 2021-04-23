@@ -175,6 +175,8 @@ int main() {
   tasks.setPosition(460, 250);
   ranks.setPosition(840, 250);
 
+  vector<vector<string>> allinput;
+
   while (window.isOpen() || window2.isOpen()) {
     if (window2.isOpen()) {
       sf::Event event2;
@@ -310,6 +312,11 @@ int main() {
               date_disp = date_disp + "\n\n" + userdInput;
               task_disp = task_disp + "\n\n" + usertInput;
               rank_disp = rank_disp + "\n\n" + userrInput;
+              vector<string> input;
+              input.push_back(userdInput);
+              input.push_back(usertInput);
+              input.push_back(userrInput);
+              allinput.push_back(input);
               dates.setString(date_disp);
               tasks.setString(task_disp);
               ranks.setString(rank_disp);
@@ -397,6 +404,11 @@ int main() {
             date_disp = date_disp + "\n\n" + userdInput;
             task_disp = task_disp + "\n\n" + usertInput;
             rank_disp = rank_disp + "\n\n" + userrInput;
+            vector<string> input;
+            input.push_back(userdInput);
+            input.push_back(usertInput);
+            input.push_back(userrInput);
+            allinput.push_back(input);
             dates.setString(date_disp);
             tasks.setString(task_disp);
             ranks.setString(rank_disp);
