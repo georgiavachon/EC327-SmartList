@@ -260,7 +260,13 @@ int main() {
           allinput = fixedinput;
         }
         // Georgia's code
-
+        vector<vector<string>> SmartList;
+        SmartList = algorithm(allinput);
+        // for (int j =0; j<SmartList.size(); j++){
+          // std::cout << SmartList.at(j).at(0) << "\n";
+          // std::cout << SmartList.at(j).at(1) << "\n";
+          // std::cout << SmartList.at(j).at(2) << "\n";
+        // }
   // creating app elements
   sf::RectangleShape background2;
   background2.setSize(sf::Vector2f(1500, 1000));
@@ -275,15 +281,36 @@ int main() {
   checkbox.setOutlineColor(sf::Color::Black);
   checkbox.setFillColor(sf::Color(sf::Color(246, 246, 246, 255)));
 
-  // add text
-  sf::Font font;
-  font.loadFromFile("/usr/share/fonts/truetype/ubuntu/Ubuntu-BI.ttf");
-
   sf::Text bannertxt2("SmartList: To Do", font);
   bannertxt2.setCharacterSize(50);
   bannertxt2.setStyle(sf::Text::Bold);
   bannertxt2.setFillColor(sf::Color::White);
+  
+  sf::Text ordereddates("", font);
+  dates.setCharacterSize(25);
+  dates.setFillColor(sf::Color::Black);
 
+  sf::Text orderedtasks("", font);
+  tasks.setCharacterSize(25);
+  tasks.setFillColor(sf::Color::Black);
+
+  sf::Text orderedranks("", font);
+  ranks.setCharacterSize(25);
+  ranks.setFillColor(sf::Color::Black);
+
+
+  string ordereddatesdisp, orderedtasksdisp, orderedranksdisp;
+  for (int i =0; i < SmartList.size();i++){
+ordereddatesdisp = ordereddatesdisp + "\n\n" + SmartList.at(i).at(0);
+orderedtasksdisp = orderedtasksdisp + "\n\n" + SmartList.at(i).at(1);
+orderedranksdisp = orderedranksdisp + "\n\n" + SmartList.at(i).at(2);
+  }
+
+  ordereddates.setString(ordereddatesdisp);
+  orderedtasks.setString(orderedtasksdisp);
+  orderedranks.setString(orderedranksdisp);
+
+ 
   // date header
   sf::Text datetitle2("Due Date (mm/dd)", font);
   datetitle2.setCharacterSize(25);
@@ -341,6 +368,11 @@ int main() {
     tasksheader2.setPosition(80,100);
     checkbox.setPosition(1260, 230);
 
+  ordereddates.setPosition(80, 250);
+  orderedtasks.setPosition(460, 250);
+  orderedranks.setPosition(840, 250);
+
+
     window2.draw(background2);
     window2.draw(topbanner2);
     window2.draw(bannertxt2);
@@ -352,12 +384,15 @@ int main() {
     window2.draw(datetitle2);
     window2.draw(tasktitle2);
     window2.draw(ranktitle2);
-
+    
+    window2.draw(ordereddates);
+    window2.draw(orderedtasks);
+    window2.draw(orderedranks);
+    
     window2.display();
     window2.clear();
   }
-        vector<vector<string>> SmartList;
-        SmartList = algorithm(allinput);
+
       }
     }
     // setting button fill color in the loop so that it can briefly change
@@ -512,6 +547,8 @@ int main() {
           // generate button clicked: open window2
           genbutton.setFillColor(sf::Color(92, 158, 225, 255));
           //  sf::RenderWindow window2(sf::VideoMode(1500, 1000), "Your SmartList");
+        vector<vector<string>> SmartList;
+        SmartList = algorithm(allinput);
           window2.create(sf::VideoMode(1000, 1000), "Your SmartList");
           window2.setFramerateLimit(10);
           window2.setView(view);
