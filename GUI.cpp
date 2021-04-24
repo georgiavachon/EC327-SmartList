@@ -15,8 +15,13 @@ using std::to_string;
 
 
 int main() {
+  // creating window
   sf::RenderWindow window(sf::VideoMode(1500, 1000), "SmartList");
   window.setFramerateLimit(10);
+  // setting view to scale for DPI
+  sf::View view(sf::FloatRect(0, 0, 1500, 1000));
+  view.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
+  window.setView(view);
 
   // creating app elements
   sf::RectangleShape background;
@@ -71,8 +76,7 @@ int main() {
   genbutton.setOutlineColor(sf::Color::Black);
   genbutton.setFillColor(sf::Color(102, 178, 255, 255));
 
-  // topbanner.setOrigin(3, 45);
-
+  // creating string and displayed text objects
   sf::Font font;
   font.loadFromFile("/usr/share/fonts/truetype/ubuntu/Ubuntu-BI.ttf");
 
@@ -81,13 +85,10 @@ int main() {
   bannertxt.setStyle(sf::Text::Bold);
   bannertxt.setFillColor(sf::Color::White);
 
-  // date field
+  // Date field
   sf::Text datetitle("Due Date (mm/dd)", font);
   datetitle.setCharacterSize(25);
   datetitle.setFillColor(sf::Color::Black);
-
-  // sf::Text dateslash("     /",font,25);
-  // dateslash.setFillColor(sf::Color::Black);
 
   sf::String userdInput;
   sf::Text userdText("", font, 25);
@@ -108,48 +109,52 @@ int main() {
   sf::String userrInput;
   sf::Text userrText("", font, 25);
 
-  // Add text
+  // Add button text
   sf::Text addtext("ADD", font);
   addtext.setCharacterSize(30);
   addtext.setFillColor(sf::Color::White);
 
-  // Tasks list
+  // Tasks header
   sf::Text tasksheader("Tasks:", font);
   tasksheader.setCharacterSize(30);
   tasksheader.setFillColor(sf::Color::Black);
 
-  // Delete last entry
+  // Delete last entry button text
   sf::Text deletelast("Delete Last Item", font);
   deletelast.setCharacterSize(30);
   deletelast.setFillColor(sf::Color::White);
 
-  // Clear All
+  // Clear All button text
   sf::Text clearall("Clear All", font);
   clearall.setCharacterSize(30);
   clearall.setFillColor(sf::Color::White);
 
-  // Generate my list
+  // Generate my list button text
   sf::Text genlist("Generate my SmartList", font);
   genlist.setCharacterSize(30);
   genlist.setFillColor(sf::Color::White);
 
   window.display();
+
   // creating blinking cursor
   sf::Text cursor("|", font, 25);
   cursor.setFillColor(sf::Color::Black);
   bool Shown = false;
   const int blinkFreq = 10;
   int blinkCnt = 0;
+  bool showcurs = false;
 
-
+  // booleans to tell whether date, task, or rank box have been clicked
   bool dateentry = false;
   bool taskentry = false;
   bool rankentry = false;
 
+  // initialzing running display strings
   string date_disp = "";
   string task_disp = "";
   string rank_disp = "";
 
+  // creating text that will display user's added input
   sf::Text dates("", font);
   dates.setCharacterSize(25);
   dates.setFillColor(sf::Color::Black);
@@ -162,30 +167,47 @@ int main() {
   ranks.setCharacterSize(25);
   ranks.setFillColor(sf::Color::Black);
 
-  bool showcurs = false;
+  // initializing vector of vector of strings that will store
+  // all valid user inputs and will be used when generate
+  // button is pressed
+  vector<vector<string>> allinput;
 
+  // initializing vector of vector of strings that will store
+  // tasks marked as completed in window2
   vector<vector<string>> done;
   done = {{"06/10", "hello"}, {"04/23", "hey"}};
 
+  // second window launched by generate my list button
   sf::Window window2;
 
-
+  // setting initial positions of some elements
   tasksheader.setPosition(80, 200);
   dates.setPosition(80, 250);
   tasks.setPosition(460, 250);
   ranks.setPosition(840, 250);
 
-  vector<vector<string>> allinput;
 
   while (window.isOpen() || window2.isOpen()) {
     if (window2.isOpen()) {
       sf::Event event2;
       while (window2.pollEvent(event2)) {
+        // when window2 is closed, completed tasks are removed from
+        // vector allinputs and from displayed tasks in window
         if (event2.type == sf::Event::Closed) {
           window2.close();
+          vector<vector<string>> fixedinput;
           for (auto d : done) {
             string thisdate = d.at(0);
             string thistask = d.at(1);
+            bool keep = true;
+            for (int i = 0; i < allinput.size(); i++) {
+              if (allinput.at(i).at(0) == thisdate && \
+                  allinput.at(i).at(1) == thistask)
+                keep = false;
+            }
+            if (keep) {
+              fixedinput.push_back(d);
+            }
             bool rm = false;
             int b = 0;
             for (int i = 0; i < date_disp.length(); i = i + 7) {
@@ -199,10 +221,10 @@ int main() {
                     if (task_disp.substr(j + 1, \
                                          thistask.length()) == thistask) {
                       date_disp = date_disp.substr(0, i) + \
-                                  date_disp.substr(i + 7, date_disp.length() - (i + 7));
+                          date_disp.substr(i + 7, date_disp.length() - (i + 7));
                       task_disp = task_disp.substr(0, j - 1) + \
                                   task_disp.substr(j + thistask.length() + 1, \
-                                                   task_disp.length() - (j + 1 + \
+                                                task_disp.length() - (j + 1 + \
                                                        thistask.length()));
                       dates.setString(date_disp);
                       tasks.setString(task_disp);
@@ -221,7 +243,7 @@ int main() {
                       if (thisrank == "10") change += 1;
                       rank_disp = rank_disp.substr(0, j - 1) + \
                                   rank_disp.substr(j + change, \
-                                                   rank_disp.length() - (j + change));
+                                      rank_disp.length() - (j + change));
                       ranks.setString(rank_disp);
                       break;
                     }
@@ -231,19 +253,25 @@ int main() {
               if (rm) break;
             }
           }
+          allinput = fixedinput;
         }
         // Georgia's code
       }
     }
+    // setting button fill color in the loop so that it can briefly change
+    // to darker and back when a user clicks a button
     add.setFillColor(sf::Color(102, 178, 255, 255));
     deletebutton.setFillColor(sf::Color(102, 178, 255, 255));
     clearbutton.setFillColor(sf::Color(102, 178, 255, 255));
     genbutton.setFillColor(sf::Color(102, 178, 255, 255));
 
+    // finding size of user input to check for valid input
     int datelength = userdInput.getSize();
     int tasklength = usertInput.getSize();
     int ranklength = userrInput.getSize();
-    sf::Event event;
+    bool valid = false;
+
+    // setting proper position of blinking cursor if textbox is hot
     if (dateentry == true)
       cursor.setPosition(85 + userdText.getLocalBounds().width, 125);
     if (taskentry == true)
@@ -256,17 +284,17 @@ int main() {
     else
       showcurs = true;
 
-    bool valid = false;
-
+    // setting blink rate of cursor
     if (++blinkCnt >= blinkFreq) {
       Shown = !Shown;
       blinkCnt = 0;
     }
 
+    sf::Event event;
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed)
         window.close();
-
+      // getting coordinates of mouse to check where user clicks
       auto mouse_pos = sf::Mouse::getPosition(window);
       auto translated_pos = window.mapPixelToCoords(mouse_pos);
       if (event.type == sf::Event::MouseButtonPressed) {
@@ -288,12 +316,14 @@ int main() {
           rankentry = true;
         } else if (add.getGlobalBounds().contains(translated_pos)) {
           // clicked add button
-          // cursor not blinking anymore
           add.setFillColor(sf::Color(92, 158, 225, 255));
+          // only add if input is valid
           if (datelength == 5 && tasklength > 0 && ranklength > 0) {
+            // cursor not blinking anymore
             dateentry = false;
             taskentry = false;
             rankentry = false;
+            // checking validity of date
             string smonth = userdInput.substring(0, 2);
             string sday = userdInput.substring(3, 2);
             int month = stoi(smonth);
@@ -308,7 +338,7 @@ int main() {
               }
             }
             if (valid) {
-              // add new entry and delete text from fields
+              // add new entry to display and vector and delete text from fields
               date_disp = date_disp + "\n\n" + userdInput;
               task_disp = task_disp + "\n\n" + usertInput;
               rank_disp = rank_disp + "\n\n" + userrInput;
@@ -327,11 +357,14 @@ int main() {
               usertInput.clear();
               userrInput.clear();
             } else {
+              // if date invalid
               userdText.setFillColor(sf::Color::Red);
             }
           }
         } else if (deletebutton.getGlobalBounds().contains(translated_pos)) {
+          // delete button clicked
           deletebutton.setFillColor(sf::Color(92, 158, 225, 255));
+          allinput.pop_back();
           char check = ' ';
           int j;
           for (j = date_disp.length() - 1; j >= 0 ; j--) {
@@ -364,6 +397,7 @@ int main() {
           ranks.setString(rank_disp);
           rank_disp = rank_disp.substr(0, j - 1);
         } else if (clearbutton.getGlobalBounds().contains(translated_pos)) {
+          // clear all button clicked
           clearbutton.setFillColor(sf::Color(92, 158, 225, 255));
           date_disp = " ";
           task_disp = " ";
@@ -371,7 +405,9 @@ int main() {
           dates.setString(date_disp);
           tasks.setString(task_disp);
           ranks.setString(rank_disp);
+          allinput = {};
         } else if (genbutton.getGlobalBounds().contains(translated_pos)) {
+          // generate button clicked: open window2
           genbutton.setFillColor(sf::Color(92, 158, 225, 255));
           window2.create(sf::VideoMode(1000, 1000), "Your SmartList");
           window2.setFramerateLimit(10);
@@ -381,6 +417,7 @@ int main() {
       if (event.type == sf::Event::TextEntered) {
         if (event.text.unicode == 13 && datelength == 5 && \
             tasklength > 0 && ranklength > 0) {
+          // enter key pressed (check validity of input)
           string smonth = userdInput.substring(0, 2);
           string sday = userdInput.substring(3, 2);
           int month = stoi(smonth);
@@ -395,7 +432,6 @@ int main() {
             }
           }
           if (valid) {
-            // fields filled out and enter is pressed: add
             // cursor not blinking anymore
             dateentry = false;
             taskentry = false;
@@ -419,10 +455,12 @@ int main() {
             usertInput.clear();
             userrInput.clear();
           } else {
+            // invalid date
             userdText.setFillColor(sf::Color::Red);
           }
         }
         if (dateentry == true) {
+          // user typing in date box (can only type ##/##)
           if (event.text.unicode == '\b' && datelength > 0) {
             userdInput.erase(datelength - 1, 1);
           } else if (event.text.unicode == 9) {
@@ -441,6 +479,7 @@ int main() {
           userdText.setFillColor(sf::Color::Black);
           userdText.setPosition(85, 125);
         } else if (taskentry == true) {
+          // user typing in task box
           if (event.text.unicode == '\b' && tasklength > 0) {
             usertInput.erase(tasklength - 1, 1);
           } else if (event.text.unicode == 9) {
@@ -457,6 +496,7 @@ int main() {
           usertText.setFillColor(sf::Color::Black);
           usertText.setPosition(465, 125);
         } else if (rankentry == true) {
+          // user typing in rank box (only 1-10)
           if (event.text.unicode == '\b' && ranklength > 0) {
             userrInput.erase(ranklength - 1, 1);
           } else if (event.text.unicode == 9) {
@@ -477,6 +517,7 @@ int main() {
         }
       }
       if (event.type == sf::Event::MouseWheelScrolled) {
+        // allow scrolling if displayed input long enough
         int scrolled = event.mouseWheelScroll.delta;
         int datey = dates.getPosition().y;
         int dateh = dates.getLocalBounds().height;
@@ -504,7 +545,6 @@ int main() {
 
     datebox.setPosition(80, 128);
     datetitle.setPosition(80, 100);
-    // dateslash.setPosition(85,125);
 
     taskbox.setPosition(460, 128);
     tasktitle.setPosition(460, 100);
@@ -514,11 +554,6 @@ int main() {
 
     add.setPosition(1200, 115);
     addtext.setPosition(1240, 120);
-
-    // tasksheader.setPosition(80, 200);
-    // dates.setPosition(80, 250);
-    // tasks.setPosition(460, 250);
-    // ranks.setPosition(840, 250);
 
     deletebutton.setPosition(550, 900);
     deletelast.setPosition(560, 905);
@@ -541,7 +576,6 @@ int main() {
 
     window.draw(datebox);
     window.draw(datetitle);
-    // window.draw(dateslash);
     window.draw(userdText);
 
     window.draw(taskbox);
