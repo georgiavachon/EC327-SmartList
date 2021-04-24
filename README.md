@@ -1,2 +1,1 @@
-# EC327
-group project
+# EC327 Group 24 SmartList
