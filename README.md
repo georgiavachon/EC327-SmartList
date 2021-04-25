@@ -9,3 +9,4 @@ Then, run the program by executing the command:
    $SmartList
 
 Test Cases:
+You may either type these test cases into our program or paste them in after line 361. 
