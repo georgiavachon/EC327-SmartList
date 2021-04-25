@@ -419,8 +419,8 @@ int main() {
                                       date_disp.substr(i + 7,
                                                        date_disp.length() - (i + 7));
                           task_disp = task_disp.substr(0, j - 1) + \
-                                      task_disp.substr(j + thistask.length() + 1
-                                                       , \task_disp.length() - (j + 1 + \
+                                      task_disp.substr(j + thistask.length() + 1\
+                                                       , task_disp.length() - (j + 1 + \
                                                            thistask.length()));
                           dates.setString(date_disp);
                           tasks.setString(task_disp);
