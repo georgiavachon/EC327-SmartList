@@ -391,19 +391,21 @@ int main() {
             if (event2.type == sf::Event::Closed) {
               window2.close();
               vector<vector<string>> fixedinput;
-              fixedinput = allinput;
+              if (done.size() == 0)
+                fixedinput = allinput;
+              for (auto a : allinput) {
+                bool keep = true;
+                for (auto d : done) {
+                  if (a.at(0) == d.at(0) && a.at(1) == d.at(1))
+                    keep = false;
+                }
+                if (keep)
+                  fixedinput.push_back(a);
+              }
+              allinput = fixedinput;
               for (auto d : done) {
                 string thisdate = d.at(0);
                 string thistask = d.at(1);
-                bool keep = true;
-                for (int i = 0; i < allinput.size(); i++) {
-                  if (allinput.at(i).at(0) == thisdate && \
-                      allinput.at(i).at(1) == thistask)
-                    keep = false;
-                }
-                if (keep) {
-                  fixedinput.push_back(d);
-                }
                 bool rm = false;
                 int b = 0;
                 for (int i = 0; i < date_disp.length(); i = i + 7) {
@@ -450,7 +452,6 @@ int main() {
                   if (rm) break;
                 }
               }
-              allinput = fixedinput;
             }
 
             int lineh = tasked.getGlobalBounds().height;
@@ -825,15 +826,15 @@ int main() {
         if (dateh > 600) {
           if (scrolled < 0) {
             if (dateh + datey >= 850) {
-              dates.setPosition(80, datey - 10 * scrolled);
-              tasks.setPosition(460, tasky - 10 * scrolled);
-              ranks.setPosition(840, ranky - 10 * scrolled);
+              dates.setPosition(80, datey + 10 * scrolled);
+              tasks.setPosition(460, tasky + 10 * scrolled);
+              ranks.setPosition(840, ranky + 10 * scrolled);
             }
           } else if (scrolled > 0) {
             if (datey <= 250) {
-              dates.setPosition(80, datey - 10 * scrolled);
-              tasks.setPosition(460, tasky - 10 * scrolled);
-              ranks.setPosition(840, ranky - 10 * scrolled);
+              dates.setPosition(80, datey + 10 * scrolled);
+              tasks.setPosition(460, tasky + 10 * scrolled);
+              ranks.setPosition(840, ranky + 10 * scrolled);
             }
           }
         }
