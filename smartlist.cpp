@@ -1,5 +1,7 @@
-// Copyright 2021 Georgia Vachon gvachon@bu.edu
-
+// Copyright Georgia Vachon 2021 gvachon@bu.edu
+// Copyright Dasha Smolina 2021 dsmolina@bu.edu
+// Copyright Megan Freeman 2021 megfree@bu.edu
+// Copyright Ayrton Reulet 2021 reulayrt@bu.edu
 #include <string>
 #include <iostream>
 #include <vector>
