@@ -43,8 +43,6 @@ void order(vector<vector<string>> &p, vector<float> month, vector<float> day, ve
   sort(mag.begin(),mag.end(), std::greater<int>());
 
   for (auto e : old)
-    std::cout << e << " ";
-  std::cout << std::endl;
 
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
