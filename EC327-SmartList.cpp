@@ -391,8 +391,6 @@ int main() {
             if (event2.type == sf::Event::Closed) {
               window2.close();
               vector<vector<string>> fixedinput;
-              if (done.size() == 0)
-                fixedinput = allinput;
               for (auto a : allinput) {
                 bool keep = true;
                 for (auto d : done) {
@@ -402,6 +400,8 @@ int main() {
                 if (keep)
                   fixedinput.push_back(a);
               }
+              if (done.size() == 0)
+                fixedinput = allinput;
               allinput = fixedinput;
               for (auto d : done) {
                 string thisdate = d.at(0);
@@ -663,6 +663,7 @@ int main() {
         } else if (deletebutton.getGlobalBounds().contains(translated_pos)) {
           // delete button clicked
           deletebutton.setFillColor(sf::Color(92, 158, 225, 255));
+          if (allinput.size()>0){
           allinput.pop_back();
           char check = ' ';
           int j;
@@ -695,6 +696,7 @@ int main() {
           rank_disp = rank_disp.substr(0, j + 1);
           ranks.setString(rank_disp);
           rank_disp = rank_disp.substr(0, j - 1);
+        }
         } else if (clearbutton.getGlobalBounds().contains(translated_pos)) {
           // clear all button clicked
           clearbutton.setFillColor(sf::Color(92, 158, 225, 255));
@@ -708,10 +710,12 @@ int main() {
         } else if (genbutton.getGlobalBounds().contains(translated_pos)) {
           // generate button clicked: open window2
           genbutton.setFillColor(sf::Color(92, 158, 225, 255));
+          if(allinput.size()>0){
           window2.create(sf::VideoMode(1000, 1000), "Your SmartList");
           window2.setFramerateLimit(10);
           window2.setView(view);
           window2.display();
+        }
         }
       }
       if (event.type == sf::Event::TextEntered) {
