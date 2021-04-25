@@ -105,7 +105,7 @@ int main() {
   sf::Text usertText("", font, 25);
 
   // Rank field
-  sf::Text ranktitle("Priority (1-10)", font);
+  sf::Text ranktitle("Priority: 1 (low) - 10 (high)", font);
   ranktitle.setCharacterSize(25);
   ranktitle.setFillColor(sf::Color::Black);
 
@@ -136,6 +136,82 @@ int main() {
   sf::Text genlist("Generate my SmartList", font);
   genlist.setCharacterSize(30);
   genlist.setFillColor(sf::Color::White);
+
+  // creating app elements
+  sf::RectangleShape background2;
+  background2.setSize(sf::Vector2f(1500, 1000));
+  background2.setFillColor(sf::Color::White);
+
+  sf::RectangleShape topbanner2;
+  topbanner2.setSize(sf::Vector2f(1500, 60));
+  topbanner2.setFillColor(sf::Color(102, 178, 255, 255));
+
+  sf::RectangleShape clickbox;
+  clickbox.setSize(sf::Vector2f(1400, 60));
+  clickbox.setFillColor(sf::Color::White);
+
+  sf::RectangleShape checkbox;
+  checkbox.setSize(sf::Vector2f(50, 50));
+  checkbox.setOutlineColor(sf::Color::Black);
+  checkbox.setFillColor(sf::Color(sf::Color(246, 246, 246, 255)));
+
+  sf::RectangleShape hidescroll3;
+  hidescroll3.setSize(sf::Vector2f(1500, 300));
+  hidescroll3.setFillColor(sf::Color::White);
+  hidescroll3.setPosition(0, 0);
+
+  sf::RectangleShape hidescroll4;
+  hidescroll4.setSize(sf::Vector2f(1500, 50));
+  hidescroll4.setFillColor(sf::Color::White);
+  hidescroll4.setPosition(0, 950);
+
+  // add text
+
+  sf::Text bannertxt2("Your SmartList", font);
+  bannertxt2.setCharacterSize(50);
+  bannertxt2.setStyle(sf::Text::Bold);
+  bannertxt2.setFillColor(sf::Color::White);
+
+  // date header
+  sf::Text datetitle2("Due Date (mm/dd)", font);
+  datetitle2.setCharacterSize(30);
+  datetitle2.setFillColor(sf::Color::Black);
+
+  // Task header
+  sf::Text tasktitle2("Task", font);
+  tasktitle2.setCharacterSize(30);
+  tasktitle2.setFillColor(sf::Color::Black);
+
+  // Completed header
+  sf::Text donetitle("Complete", font);
+  donetitle.setCharacterSize(30);
+  donetitle.setFillColor(sf::Color::Black);
+
+  // Instructions list
+  sf::Text instruct("Click on your task to mark as complete", font);
+  instruct.setCharacterSize(25);
+  instruct.setFillColor(sf::Color(54, 120, 231, 255));
+
+  // Tasks list
+  sf::Text tasksheader2("Tasks (in order of priority):", font);
+  tasksheader2.setCharacterSize(35);
+  tasksheader2.setFillColor(sf::Color::Black);
+
+  // Dates output
+  sf::Text dated("", font);
+  dated.setCharacterSize(25);
+  dated.setFillColor(sf::Color::Black);
+
+  // Text output
+  sf::Text tasked("", font);
+  tasked.setCharacterSize(25);
+  tasked.setFillColor(sf::Color::Black);
+
+  // Completed output
+  sf::Text complete("", font);
+  complete.setCharacterSize(25);
+  complete.setFillColor(sf::Color(45, 216, 17, 255));
+
 
   window.display();
 
@@ -196,69 +272,69 @@ int main() {
       while (window2.pollEvent(event2)) {
         // when window2 is closed, completed tasks are removed from
         // vector allinputs and from displayed tasks in window
-        if (event2.type == sf::Event::Closed) {
-          window2.close();
-          vector<vector<string>> fixedinput;
-          for (auto d : done) {
-            string thisdate = d.at(0);
-            string thistask = d.at(1);
-            bool keep = true;
-            for (int i = 0; i < allinput.size(); i++) {
-              if (allinput.at(i).at(0) == thisdate && \
-                  allinput.at(i).at(1) == thistask)
-                keep = false;
-            }
-            if (keep) {
-              fixedinput.push_back(d);
-            }
-            bool rm = false;
-            int b = 0;
-            for (int i = 0; i < date_disp.length(); i = i + 7) {
-              b++;
-              if (date_disp.substr(i + 2, 5) == thisdate) {
-                // dates.setString(thisdate);
-                int lb = 0;
-                for (int j = 0; j < task_disp.length(); j++) {
-                  if (task_disp.at(j) == '\n') lb++;
-                  if (lb / 2 == b && lb % 2 == 0) {
-                    if (task_disp.substr(j + 1, \
-                                         thistask.length()) == thistask) {
-                      date_disp = date_disp.substr(0, i) + \
-                          date_disp.substr(i + 7, date_disp.length() - (i + 7));
-                      task_disp = task_disp.substr(0, j - 1) + \
-                                  task_disp.substr(j + thistask.length() + 1, \
-                                                task_disp.length() - (j + 1 + \
-                                                       thistask.length()));
-                      dates.setString(date_disp);
-                      tasks.setString(task_disp);
-                      rm = true;
-                      break;
-                    }
-                  }
-                }
-                if (rm) {
-                  int lb = 0;
-                  for (int j = 0; j < rank_disp.length(); j++) {
-                    if (rank_disp.at(j) == '\n') lb++;
-                    if (lb / 2 == b && lb % 2 == 0) {
-                      string thisrank = rank_disp.substr(j + 1, 2);
-                      int change = 2;
-                      if (thisrank == "10") change += 1;
-                      rank_disp = rank_disp.substr(0, j - 1) + \
-                                  rank_disp.substr(j + change, \
-                                      rank_disp.length() - (j + change));
-                      ranks.setString(rank_disp);
-                      break;
-                    }
-                  }
-                }
-              }
-              if (rm) break;
-            }
-          }
-          //std::set_difference(allinput.begin(),allinput.end(),done.begin(),done.end(),allinput.begin());
-          allinput = fixedinput;
-        }
+        if (event2.type == sf::Event::Closed) 
+         window2.close();
+        //   vector<vector<string>> fixedinput;
+        //   for (auto d : done) {
+        //     string thisdate = d.at(0);
+        //     string thistask = d.at(1);
+        //     bool keep = true;
+        //     for (int i = 0; i < allinput.size(); i++) {
+        //       if (allinput.at(i).at(0) == thisdate && \
+        //           allinput.at(i).at(1) == thistask)
+        //         keep = false;
+        //     }
+        //     if (keep) {
+        //       fixedinput.push_back(d);
+        //     }
+        //     bool rm = false;
+        //     int b = 0;
+        //     for (int i = 0; i < date_disp.length(); i = i + 7) {
+        //       b++;
+        //       if (date_disp.substr(i + 2, 5) == thisdate) {
+        //         // dates.setString(thisdate);
+        //         int lb = 0;
+        //         for (int j = 0; j < task_disp.length(); j++) {
+        //           if (task_disp.at(j) == '\n') lb++;
+        //           if (lb / 2 == b && lb % 2 == 0) {
+        //             if (task_disp.substr(j + 1, \
+        //                                  thistask.length()) == thistask) {
+        //               date_disp = date_disp.substr(0, i) + \
+        //                   date_disp.substr(i + 7, date_disp.length() - (i + 7));
+        //               task_disp = task_disp.substr(0, j - 1) + \
+        //                           task_disp.substr(j + thistask.length() + 1, \
+        //                                         task_disp.length() - (j + 1 + \
+        //                                                thistask.length()));
+        //               dates.setString(date_disp);
+        //               tasks.setString(task_disp);
+        //               rm = true;
+        //               break;
+        //             }
+        //           }
+        //         }
+        //         if (rm) {
+        //           int lb = 0;
+        //           for (int j = 0; j < rank_disp.length(); j++) {
+        //             if (rank_disp.at(j) == '\n') lb++;
+        //             if (lb / 2 == b && lb % 2 == 0) {
+        //               string thisrank = rank_disp.substr(j + 1, 2);
+        //               int change = 2;
+        //               if (thisrank == "10") change += 1;
+        //               rank_disp = rank_disp.substr(0, j - 1) + \
+        //                           rank_disp.substr(j + change, \
+        //                               rank_disp.length() - (j + change));
+        //               ranks.setString(rank_disp);
+        //               break;
+        //             }
+        //           }
+        //         }
+        //       }
+        //       if (rm) break;
+        //     }
+        //   }
+        //   //std::set_difference(allinput.begin(),allinput.end(),done.begin(),done.end(),allinput.begin());
+        //   allinput = fixedinput;
+        // }
         // Georgia's code
         // sf::RenderWindow window2(sf::VideoMode(1500, 1000), "Your SmartList");
   // window2.setFramerateLimit(10);
@@ -378,8 +454,69 @@ int main() {
   while (window2.isOpen()) {
     sf::Event event2;
     while (window2.pollEvent(event2)) {
-      if (event2.type == sf::Event::Closed)
-        window2.close();
+      if (event2.type == sf::Event::Closed) {
+          window2.close();
+          vector<vector<string>> fixedinput;
+          for (auto d : done) {
+            string thisdate = d.at(0);
+            string thistask = d.at(1);
+            bool keep = true;
+            for (int i = 0; i < allinput.size(); i++) {
+              if (allinput.at(i).at(0) == thisdate && \
+                  allinput.at(i).at(1) == thistask)
+                keep = false;
+            }
+            if (keep) {
+              fixedinput.push_back(d);
+            }
+            bool rm = false;
+            int b = 0;
+            for (int i = 0; i < date_disp.length(); i = i + 7) {
+              b++;
+              if (date_disp.substr(i + 2, 5) == thisdate) {
+                // dates.setString(thisdate);
+                int lb = 0;
+                for (int j = 0; j < task_disp.length(); j++) {
+                  if (task_disp.at(j) == '\n') lb++;
+                  if (lb / 2 == b && lb % 2 == 0) {
+                    if (task_disp.substr(j + 1, \
+                                         thistask.length()) == thistask) {
+                      date_disp = date_disp.substr(0, i) + \
+                          date_disp.substr(i + 7, date_disp.length() - (i + 7));
+                      task_disp = task_disp.substr(0, j - 1) + \
+                                  task_disp.substr(j + thistask.length() + 1, \
+                                                task_disp.length() - (j + 1 + \
+                                                       thistask.length()));
+                      dates.setString(date_disp);
+                      tasks.setString(task_disp);
+                      rm = true;
+                      break;
+                    }
+                  }
+                }
+                if (rm) {
+                  int lb = 0;
+                  for (int j = 0; j < rank_disp.length(); j++) {
+                    if (rank_disp.at(j) == '\n') lb++;
+                    if (lb / 2 == b && lb % 2 == 0) {
+                      string thisrank = rank_disp.substr(j + 1, 2);
+                      int change = 2;
+                      if (thisrank == "10") change += 1;
+                      rank_disp = rank_disp.substr(0, j - 1) + \
+                                  rank_disp.substr(j + change, \
+                                      rank_disp.length() - (j + change));
+                      ranks.setString(rank_disp);
+                      break;
+                    }
+                  }
+                }
+              }
+              if (rm) break;
+            }
+          }
+          //std::set_difference(allinput.begin(),allinput.end(),done.begin(),done.end(),allinput.begin());
+          allinput = fixedinput;
+        }
 
       int lineh = tasked.getGlobalBounds().height;
       // account for the tasks printing with \n\n before the first task
