@@ -698,9 +698,9 @@ int main() {
         } else if (clearbutton.getGlobalBounds().contains(translated_pos)) {
           // clear all button clicked
           clearbutton.setFillColor(sf::Color(92, 158, 225, 255));
-          date_disp = " ";
-          task_disp = " ";
-          rank_disp = " ";
+          date_disp = "";
+          task_disp = "";
+          rank_disp = "";
           dates.setString(date_disp);
           tasks.setString(task_disp);
           ranks.setString(rank_disp);
