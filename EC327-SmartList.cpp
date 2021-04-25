@@ -391,6 +391,7 @@ int main() {
             if (event2.type == sf::Event::Closed) {
               window2.close();
               vector<vector<string>> fixedinput;
+              fixedinput = allinput;
               for (auto d : done) {
                 string thisdate = d.at(0);
                 string thistask = d.at(1);
