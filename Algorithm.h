@@ -2,6 +2,7 @@
 // Copyright Megan Freeman 2021 megfree@bu.edu
 // Copyright Dasha Smolina 2021 dsmolina@bu.edu
 // Copyright Georgia Vachon gvachon@bu.edu
+// Copyright Ayrton Reulet 2021 reulayrt@bu.edu
 #pragma once
 using std::vector;
 using std::string;
@@ -125,12 +126,6 @@ void order(vector<vector<string>> &p, vector<float> month, vector<float> day, ve
   }
   old = mag;
   sort(mag.begin(),mag.end(), std::greater<int>());
-  for (int i = 0; i < old.size(); i++)
-    std::cout << old.at(i) << " ";
-  std::cout << std::endl;
-  for (int i = 0; i < mag.size(); i++)
-    std::cout << mag.at(i) << " ";
-  std::cout << std::endl;
 
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
@@ -183,12 +178,6 @@ vector<vector<string>> algorithm(vector<vector<string>> &p) {
     priority.push_back(stoi(p.at(i).at(2)));
   }
 
-  for (auto a : p) {
-    for (auto e : a)
-      std::cout << e << " ";
-    std::cout << std::endl;
-  }
-  std::cout << std::endl;
   order(p, month, day, priority);
   back2Normal(p);
 
