@@ -2,7 +2,6 @@
 // Copyright Megan Freeman 2021 megfree@bu.edu
 // Copyright Dasha Smolina 2021 dsmolina@bu.edu
 // Copyright Georgia Vachon gvachon@bu.edu
-// Copyright Ayrton Reulet 2021 reulayrt@bu.edu
 #pragma once
 using std::vector;
 using std::string;
