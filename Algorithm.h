@@ -122,6 +122,11 @@ void order(vector<vector<string>> &p, vector<float> month, vector<float> day, ve
   vector<float> mag(n), old;
   for (int i = 0; i < month.size(); i++) {
     mag.at(i) = ((13-month.at(i))*500) + ((31-day.at(i))*4.9) + (priority.at(i));
+    for (int j = 0; j < i; j++) {
+      if (mag.at(i) == mag.at(j)) {
+        mag.at(i) = mag.at(i) + 1;
+      }
+    }
   }
   old = mag;
   sort(mag.begin(),mag.end(), std::greater<int>());
