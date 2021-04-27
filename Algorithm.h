@@ -124,7 +124,7 @@ void order(vector<vector<string>> &p, vector<float> month, vector<float> day, ve
     mag.at(i) = ((13-month.at(i))*500) + ((31-day.at(i))*4.9) + (priority.at(i));
     for (int j = 0; j < i; j++) {
       if (mag.at(i) == mag.at(j)) {
-        mag.at(i) = mag.at(i) + 1;
+        mag.at(i) = mag.at(i) + 0.01;
       }
     }
   }
