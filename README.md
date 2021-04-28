@@ -4,6 +4,15 @@
 // Copyright Georgia Vachon gvachon@bu.edu
 
 # EC327 Group 24 SmartList
+Once you have opened the program, click on any of the textboxes at the top of the screen to begin entering your first task. 
+You can only enter dates in the format ##/## and can only enter numbers 1-10 for the priority, but you can name the task whatever you would like. 
+Once you have entered your task in the proper format, press the enter key or click on the “ADD” button to see your task listed below. 
+Repeat this process until you have entered all of your tasks. If necessary, you can delete the last item added at any time by clicking the corresponding button at the bottom of the screen.
+When you are ready to generate your smart list you can click the button in the bottom right and open the Your SmartList window. 
+In this window you can click anywhere on the tasks to check them off as you complete them. You can also uncheck them if you make a mistake. 
+Completed tasks will remain on the screen until the window is closed, when they will then be deleted from your list of tasks. 
+When you are done with Your SmartList, close the window to return to the welcome screen where you can add to your existing list or start a new one by clicking the “Clear All” button. 
+
 Instructions on how to compile and run our program:
 To compile, open terminal in this directory and run the command:
 
