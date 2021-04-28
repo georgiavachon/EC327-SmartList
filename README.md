@@ -2,11 +2,11 @@
 Instructions on how to compile and run our program:
 To compile, open terminal in this directory and run the command:
 
-   $g++ EC327-SmartList.cpp -o SmartList -lsfml-graphics -lsfml-window -lsfml-system
+   $make smart
 
 Then, run the program by executing the command:
 
-   $SmartList
+   $smart
 
 Test Cases:
-You may either type these test cases into our program or paste them in after line 361. 
+TO experience the full effect of our app, you may type in the test cases one at a time as the program is meant to function. If you would like to speed up this process, you can copy paste the test cases after line 316 of our main code. 
